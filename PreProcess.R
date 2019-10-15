@@ -7,6 +7,7 @@ library (corrplot)
 library(mlbench)
 
 #Importdata----
+existingproductattributes2017 <- read_csv("existingproductattributes2017.csv")
 Exist <- existingproductattributes2017
 
 #Preprocessing----
@@ -39,7 +40,7 @@ corrplot(corrData, method ="ellipse")
 corrplot(corrData, method = "number")
 corrplot(corrData, method = "pie", type = "upper")
 corrplot.mixed(corrData)
-corrplot(readyData, type = "upper")
+# corrplot(readyData, type = "upper")
 ggsave("correlationmatrixallattributes.png", width = 5, height = 5)
 corrData <- cor(readyData)
 corrplot
@@ -57,7 +58,9 @@ RankImp <- caret::train(Volume~.,
                  method="rpart", # 1,
                  preProcess="center", 
                  trControl=control)
-warnings()
+
+print(RankImp)
+
 corrDataImpAttributes = corrData
 corrDataImpAttributes < - cor(corrData)
 print(corrDataImpAttributes)
@@ -67,9 +70,12 @@ findcorrelationneg90 = corrDataImpAttributes
 findCorrelation(findcorrelationneg90, cutoff=-0.9, verbose=FALSE, names=FALSE, exact = FALSE)
 print(findcorrelationneg90)               
 corrplot(findcorrelationneg90)
-findCorrelation()
+# findCorrelation()
 cor(corrDataImpAttributes)
+
+# extract names data frame
 names(findcorrelationneg90)
+
 head(findcorrelationneg90)
 corrplot(findcorrelationneg90)
 corrplot(findcorrelationneg90, order = "hclust", addrect = 2)
@@ -82,18 +88,20 @@ ggsave("corrAOEOrder.png", width = 5, height = 5)
 corrDataImpAttributes = corrData
 SignCorr <- cor.mtest(corrDataImpAttributes, conf.level = .95)
 print(SignCorr)
-plot(SignCorr)
-corrplot(SignCorr, p.mat = SignCorr$p, sig.level = 2)
-corrplot(SignCorr, p.mat = SignCorr$p, insig = "blank" )
+# plot(SignCorr)
+# corrplot(SignCorr, p.mat = SignCorr$p, sig.level = 2)
+# corrplot(SignCorr, p.mat = SignCorr$p, insig = "blank" )
 
 #Select final relevant attributes----
-#based on VarImp(RankImp) rpart took all lower than 50 out because of overfitting (5*)
-#and not correlated
+#based on VarImp(RankImp) rpart took all lower than 50 out because of 
+#overfitting (5*) and not correlated
 
 Final_relevant_vars <- c(
   "ProductTypeLaptop","ProductTypeNetbook","ProductTypePC",
   "ProductTypeSmartphone","ProductNum","x4StarReviews",
-  "x3StarReviews","1StarReviews", "PositiveServiceReview", "Volume")
+  "x3StarReviews","1StarReviews", "PositiveServiceReview", "Volume"
+  
+  )
 
 corrData <- cor(readyData[relevant_vars])
 corrplot(corrData, method ="ellipse")
@@ -101,3 +109,4 @@ corrplot(corrData, method = "number")
 corrplot(corrData, method = "pie", type = "upper")
 ggsave("correlationmatrixfinalattributes.png", width = 5, height = 5)
 corrplot.mixed(corrData)
+

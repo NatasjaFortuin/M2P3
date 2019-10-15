@@ -21,6 +21,10 @@
 #alt-enter geeft run commando voor alle regels in je script
 #Je gebruikt ‘labs’ om verschillende argumenten te combineren
 
+#CUT----
+#cut(x=data$column, breaks = 5) R creates 5 groups within the column to make it
+#more readable (ordering from min/max and then slit it in 5 groups)
+
 #VARIABELE----
 #Aanmaken van variabelen doe je met <- of met =
 
