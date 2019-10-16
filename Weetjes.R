@@ -148,6 +148,11 @@
 #command gebruiken om te kijken wat de working directory voor de huidige R-sessie is. Met het setwd()
 #command kun je de working directory veranderen.
 
+#KOLOM VERWIJDEREN----
+#Library (dplyr)
+## Drop the columns of the dataframe
+   #select (mydata,-c(kolomnaam1,kolomnaam2,kolomnaam3))
+
 #KETEN OPERATORS----
 #voert een keten van operators (zijnde opdrachten) achter elkaar uit tot je afsluit met pipe
 #data %>% command voert achtereenvolgens de ingevoerde functies als call uit tussen %>%

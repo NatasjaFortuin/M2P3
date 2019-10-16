@@ -103,10 +103,11 @@ Final_relevant_vars <- c(
   
   )
 
-corrData <- cor(readyData[relevant_vars])
 corrplot(corrData, method ="ellipse")
 corrplot(corrData, method = "number")
 corrplot(corrData, method = "pie", type = "upper")
 ggsave("correlationmatrixfinalattributes.png", width = 5, height = 5)
-corrplot.mixed(corrData)
+
+#Detect outliners----
+
 
