@@ -37,8 +37,12 @@ relevant_vars <- c(
 # correlationplots----
 corrData <- cor(readyData[relevant_vars])
 corrplot(corrData, method ="ellipse")
+corrPlotGraphic <- corrplot(corrData, method ="ellipse")
 corrplot(corrData, method = "number")
 corrplot(corrData, method = "pie", type = "upper")
+corrPlotGraphic <- corrplot(corrData, method = "pie", type = "upper")
+ggsave("corrPlotGraphic.png", width = 5, height = 5)
+
 corrplot.mixed(corrData)
 # corrplot(readyData, type = "upper")
 ggsave("correlationmatrixallattributes.png", width = 5, height = 5)

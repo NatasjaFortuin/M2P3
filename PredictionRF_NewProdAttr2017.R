@@ -34,31 +34,50 @@ head(NewData)
 #Remove irrelevant Producttypes from the data
 NewData <- select (NewData, -c(Acc,Disp,ExWar,GameC,Printer,PrSupp,SW,Tablet))
 head(NewData)
-saveRDS(object = select(NewData, -c(Acc,Disp,ExWar,GameC,Printer,PrSupp,SW,Tablet)), file = "Remove irrelevant ProductTypes NewData.rds")
 
 #### PREDICT ####
-#rfFit2 best performing model----
+#rfFit2 BEST PERFOM MOD----
 NewData$PredVol <- predict(object = rfFit2, newdata=NewData)
+
+#Postpresample---- CHECK KPI'S of new column
+postResample(pred = NewData$PredVol, obs = NewData$PredVol)
+
 head(NewData)
+
+summary(NewData)
+
+str(NewData)
 
 #RF Pred Plot----
 #Netbook----
 ggplot(data = NewData, aes(x = Netbook, y = PredVol)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE)
+  geom_jitter(width = 5, height = 5)
+
+PlotNetbook <- ggplot(data = NewData, aes(x = Netbook, y = PredVol)) +
+  geom_jitter(width = 5, height = 5)
+
 #Laptop----
 ggplot(data = NewData, aes(x = Laptop, y = PredVol)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE)
+  geom_jitter(width = 5, height = 5)
+
+PlotLaptop <- ggplot(data = NewData, aes(x = Laptop, y = PredVol)) +
+  geom_jitter(width = 5, height = 5)
+
 #PC----
 ggplot(data = NewData, aes(x = PC, y = PredVol)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE)
+  geom_jitter(width = 5, height = 5)
+
+PlotPC <- ggplot(data = NewData, aes(x = PC, y = PredVol)) +
+  geom_jitter(width = 5, height = 5)
+
 #Smartphone----
 ggplot(data = NewData, aes(x = Phone, y = PredVol)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE)
+  geom_jitter(width = 5, height = 5)
 
+PlotPhone <- ggplot(data = NewData, aes(x = Phone, y = PredVol)) +
+  geom_jitter(width = 5, height = 5)
+
+##############n
 #KNNFit2----
 NewData$PredVolKNN <- predict(object = KNNFit2, newdata=NewData)
 
@@ -126,7 +145,3 @@ View(NewData)
 
 
 write.csv(NewData, file="PredictedData.csv", row.names = TRUE)
-
-#postResample(pred = predict(object = rfFit2, newdata=testing_lm2), obs = testing_lm2$Volume)
-#postResample(pred = NewData$PredVol, obs = NewData$Pred)
-

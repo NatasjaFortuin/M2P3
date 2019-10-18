@@ -17,11 +17,13 @@ readyData <- data.frame(predict(DummyVarsExist, newdata = Exist))
 # Final selection relevant features----
 Final_relevant_vars <- c(
   "ProductTypeLaptop","ProductTypeNetbook","ProductTypePC",
-  "ProductTypeSmartphone","ProductNum","x1StarReviews","x4StarReviews",
+  "ProductTypeSmartphone","ProductNum","x4StarReviews",
   "x3StarReviews","PositiveServiceReview","Volume"
 )
 
 # create correlation matrix----
+cor(readyData[Final_relevant_vars])
+corrplot(readyData)
 corrData <- cor(readyData[Final_relevant_vars])
 final_df <- readyData[Final_relevant_vars]
 
@@ -60,7 +62,7 @@ saveRDS(lmFit, file = "lmFit.rds")
 summary(lmFit)
 #summaryperformance_lmFit
 #multiple R-squared   Adjusted R-squared 
-# 0.8699                0.8433 
+# 0.8699                0.8467 
 saveRDS(object = lmFit, file = "lmFit.rds")
 
 #Predict Output----
@@ -73,8 +75,8 @@ final_df$predLM <- predict(lmFit, testing_lm)
 
 #LM postresample----
 postResample(pred = predict(object = lmFit, newdata = testing_lm), obs = testing_lm$Volume)
-##output = RMSE   Rsquared    MAE
-##lmFit =  +/-434.867  0.5694    273.809
+##output =        RMSE   Rsquared    MAE
+##lmFit =  +/-4354.847    0.5672     271.163
 
 
 #KNN MODEL----
@@ -107,17 +109,17 @@ KNNFit <- train(Volume~.,
 KNNFit
 #KNN traning results----
 #   RMSE     Rsquared  MAE 
-#   1215.96  0.8769   MAE 617.10
+#   864.3071  0.8787   MAE 463.236
 
 #KNN summary KNNFit K3----
 summary(KNNFit)
-#summaryperformance_KNNFit= Min Mean Abs Error: 468.16, Min Mean S-error 1914 
+#summaryperformance_KNNFit= Min Mean Abs Error: 420.7407, Min Mean S-error 1945 
 saveRDS(object = KNNFit, file = "KNNFit.rds")
 
 #KNN postresample----
 postResample(pred = predict(object = KNNFit, newdata = testingKNN), obs = testingKNN$Volume)
 #   RMSE     Rsquared MAE 
-#   406.473  0.6072   206.83 
+#   380.911  0.6624   210.75 
 
 #Predict Output----
 predicted= predict(KNNFit, testingKNN)
@@ -157,13 +159,13 @@ rfFit <- train(Volume~.,
 rfFit
 #RF traning results----
 #   RMSE     Rsquared  MAE 
-#   881.01   0.9837   447.11
+#   870.75   0.978     464.13
 saveRDS(object = rfFit, file = "rfFit.rds")
 
 #RF postresample----
 postResample(pred = predict(object = rfFit, newdata = testingrf), obs = testingrf$Volume)
 #   RMSE     Rsquared MAE 
-#   151.82   0.9383   95.989
+#   143.58   0.955    101.373
 
 #Predict Output----
 predicted= predict(rfFit, testingrf)
@@ -203,13 +205,13 @@ svmFit <- train(Volume~.,
 svmFit
 #SVM traning results----
 #   RMSE     Rsquared  MAE Tuning par cost was held constant at value 0.25
-#   1002.58   0.8955   517.39
+#   787.177   0.9629   433.4216
 saveRDS(object = svmFit, file = "svmFit.rds")
 
 #SVM postresample----
 postResample(pred = predict(object = svmFit, newdata = testingsvm), obs = testingsvm$Volume)
 #   RMSE     Rsquared MAE 
-#   410.01    0.6026  255.39
+#   392.461   0.5861  243.71
 
 #Predict Output----
 predicted= predict(svmFit, testingsvm)
@@ -318,7 +320,8 @@ ggplot(data = final_df, aes(x = ProductTypeSmartphone, y = predSVM)) +
 
 #Rename columnnames final_df----
 head(final_df)
-names(final_df)<-c("Laptop","Netbook","PC", "Phone", "ID", "x1Star", "x4Star", "x3Star", "PosSerRev", "Volume", "predSVM", "predLM", "predKNN", "predRF")
+names(final_df)<-c("Laptop","Netbook","PC", "Phone", "ID", "x4Star", "x3Star", 
+    "PosSerRev", "Volume", "predSVM", "predLM", "predKNN", "predRF")
 head(final_df)
 
 #Find outliers
@@ -386,7 +389,7 @@ View(Finaldf_cleaned)
 Finaldf_cleaned <- final_df_ExOut
 str(Finaldf_cleaned)
 
-Finaldf_cleaned <- distinct(.data = final_df_ExOut, PosSerRev, x1Star, x4Star, x3Star, Volume, .keep_all = TRUE)
+Finaldf_cleaned <- distinct(.data = final_df_ExOut, PosSerRev, x4Star, x3Star, Volume, .keep_all = TRUE)
 rm(Finalsdf_cleaned)
 str(Finaldf_cleaned)
 View(Finaldf_cleaned)
@@ -424,7 +427,7 @@ saveRDS(lmFit2, file = "lmFit2.rds")
 summary(lmFit2)
 #summaryperformance_lmFit2
 #multiple R-squared   Adjusted R-squared 
-# 0.6948                0.6324
+# 0.6784                0.6294
 saveRDS(object = lmFit2, file = "lmFit2.rds")
 
 #Predict Output----
@@ -438,7 +441,7 @@ Finaldf_cleaned$predLM <- predict(lmFit2, Finaldf_cleaned)
 #LM postresample----
 postResample(pred = predict(object = lmFit2, newdata = testing_lm2), obs = testing_lm2$Volume)
 ##output =    RMSE   Rsquared    MAE
-##lmFit =  +/-326.676  0.6156    215.198
+##lmFit =  +/-320.680  0.6456    223.876
 
 
 #KNN MODEL----
@@ -471,17 +474,17 @@ KNNFit2 <- train(Volume~.,
 KNNFit2
 #KNN traning results----
 #   RMSE     Rsquared  MAE 
-#   335.4799  0.7253143   MAE 209.0681
+#   266.3007  0.84267   MAE 159.5161
 
 #KNN summary KNNFit2 K3----
 summary(KNNFit2)
-#summaryperformance_KNNFit= Min Mean Abs Error: 468.16, Min Mean S-error 1914 
+#summaryperformance_KNNFit= Min Mean Abs Error: 150.2986, Min Mean S-error 8705 
 saveRDS(object = KNNFit2, file = "KNNFit2.rds")
 
 #KNN postresample----
 postResample(pred = predict(object = KNNFit2, newdata = testingKNN2), obs = testingKNN2$Volume)
 #   RMSE     Rsquared MAE 
-#   196.067   0.8338  111.94 
+#   191.826   0.8312  102.92 
 
 #Predict Output----
 predicted= predict(KNNFit2, testingKNN2)
@@ -521,13 +524,13 @@ rfFit2 <- train(Volume~.,
 rfFit2
 #RF traning results----
 #   RMSE     Rsquared  MAE 
-#   269.39   0.8622    174.71
+#   277.3768   0.8645   193.8815
 saveRDS(object = rfFit2, file = "rfFit2.rds")
 
 #RF postresample----
 postResample(pred = predict(object = rfFit2, newdata = testingrf2), obs = testingrf2$Volume)
 #   RMSE     Rsquared MAE 
-#   119.11   0.9480   74.09
+#   137.120   0.9509  109.22
 
 #Predict Output----
 predicted= predict(rfFit2, testingrf2)
@@ -566,13 +569,13 @@ svmFit2 <- train(Volume~.,
 svmFit2
 #SVM traning results----
 #   RMSE     Rsquared  MAE Tuning par cost was held constant at value 0.25
-#   588.6089  0.6468   347.0124
+#   511.667  0.7061    281.878
 saveRDS(object = svmFit2, file = "svmFit2.rds")
 
 #SVM postresample----
 postResample(pred = predict(object = svmFit2, newdata = testingsvm2), obs = testingsvm2$Volume)
-#   RMSE     Rsquared MAE 
-#   294.894  0.5832   132.946
+#   RMSE     Rsquared  MAE 
+#   286.367  0.63371   121.99
 
 #Predict Output----
 predicted= predict(svmFit2, testingsvm2)
@@ -599,18 +602,26 @@ View(PredData)
 ggplot(data = PredData) +
   geom_point(aes(x = Volume, y = predLM)) +
   geom_abline(intercept = 1)
+ggsave("Errorplot_LM.png", width = 5, height = 5)
+
+PlotErrorCheck <- ggplot(data = PredData) +
+  geom_point(aes(x = Volume, y = predLM)) +
+  geom_abline(intercept = 1)
 
 ggplot(data = PredData) +
   geom_point(aes(x = Volume, y = predKNN)) +
   geom_abline(intercept = 1)
+ggsave("Errorplot_KNN.png", width = 5, height = 5)
 
 ggplot(data = PredData) +
   geom_point(aes(x = Volume, y = predRF)) +
   geom_abline(intercept = 1)
+ggsave("Errorplot_RF.png", width = 5, height = 5)
 
 ggplot(data = PredData) +
   geom_point(aes(x = Volume, y = predSVM)) +
   geom_abline(intercept = 1)
+ggsave("Errorplot_SVM.png", width = 5, height = 5)
 
 #### REVIEW by PLOTS2 ####
 
@@ -686,18 +697,22 @@ ggplot(data = PredData, aes(x = PC, y = predSVM)) +
 ggplot(data = PredData, aes(x = Phone, y = predLM)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE)
+ggsave("Smartphoneplot_LM.png", width = 5, height = 5)
 
 #Model plot KNN----
 ggplot(data = PredData, aes(x = Phone, y = predKNN)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE)
+ggsave("Smartphoneplot_KNN.png", width = 5, height = 5)
 
 #Model plot RF----
 ggplot(data = PredData, aes(x = Phone, y = predRF)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE)
+ggsave("Smartphoneplot_RF.png", width = 5, height = 5)
 
 #Model plot SVM----
 ggplot(data = PredData, aes(x = Phone, y = predSVM)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE)
+ggsave("SmartphoneplotRF.png", width = 5, height = 5)
